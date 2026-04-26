@@ -51,6 +51,9 @@ Notes:
 
 The stack includes tool-guidance RAG in MCP (`rag_*` tools), backed by Qdrant.
 
+Detailed operator guide:
+- `docs/RAG_OPERATIONS_GUIDE.md`
+
 1. Set these values in root `.env`:
 
 ```dotenv
