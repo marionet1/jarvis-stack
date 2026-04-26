@@ -54,28 +54,31 @@ The stack includes tool-guidance RAG in MCP (`rag_*` tools), backed by Qdrant.
 1. Set these values in root `.env`:
 
 ```dotenv
-RAG_BACKEND=qdrant
-QDRANT_URL=http://qdrant:6333
-QDRANT_COLLECTION=jarvis1net_tool_docs
-OPENAI_API_KEY=...
-RAG_EMBED_MODEL=text-embedding-3-small
-RAG_GUIDANCE_AUTO=1
+OPENROUTER_API_KEY=...
+# optional dedicated embedding key:
+RAG_EMBED_API_KEY=
+# optional if Qdrant auth is enabled:
+QDRANT_API_KEY=
 ```
 
-2. Start or rebuild services:
+2. Configure non-secret RAG settings in:
+
+`mcp-jarvis1net/config/rag_config.json`
+
+3. Start or rebuild services:
 
 ```bash
 docker compose up -d --build
 ```
 
-3. Ingest documentation:
+4. Ingest documentation:
 
 ```bash
 cd mcp-jarvis1net
 python3 scripts/ingest_docs.py --source scripts/sources_microsoft.yaml --source scripts/sources_internal.yaml
 ```
 
-4. Validate retrieval quality:
+5. Validate retrieval quality:
 
 ```bash
 python3 tests/rag_eval/evaluate_rag.py
