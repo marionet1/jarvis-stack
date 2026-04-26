@@ -1,0 +1,8 @@
+**/.git
+**/__pycache__
+**/.venv
+**/node_modules
+**/dist
+**/.env
+!agent-jarvis1net/.env.example
+!mcp-jarvis1net/.env.example

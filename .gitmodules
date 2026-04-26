@@ -1,0 +1,6 @@
+[submodule "agent-jarvis1net"]
+	path = agent-jarvis1net
+	url = https://github.com/marionet1/agent-jarvis1net.git
+[submodule "mcp-jarvis1net"]
+	path = mcp-jarvis1net
+	url = https://github.com/marionet1/mcp-jarvis1net.git

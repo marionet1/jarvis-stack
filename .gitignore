@@ -1,0 +1,25 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.DS_Store
+Thumbs.db
+# Lokalne artefakty / sekrety — nie commituj
+*.zip
+stack-jarvis1net*.zip
+jarvis-stack*.zip
+# Klucze / pulpity lokalne (VPS) — trzymaj poza gitem
+vps_*_ed25519
+vps_*.pub
+*.rdp
+# Opcjonalna strona statyczna — nie jest częścią obrazu Docker
+www-jarvis1net/
+logs/
+ms_graph_token_cache.json
+microsoft_agent_settings.json
+jarvis_runtime_secrets.json
+node_modules/
+mcp-jarvis1net/dist/
+dist/

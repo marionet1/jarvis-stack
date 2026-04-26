@@ -1,0 +1,27 @@
+# Pełny stack: agent (submoduł jarvis1net) + MCP (Python) w jednym kontenerze (stdio).
+# Instalacja: README.md → „Instalacja: pełny stos Docker (zalecane)”.
+#
+# 1. cp agent-jarvis1net/.env.example .env  — uzupełnij klucze
+# 2. docker compose build && docker compose up -d
+# 3. Logi: docker compose logs -f   |  dane: wolumen jarvis_data → /app/data
+
+services:
+  jarvis1net:
+    image: stack-jarvis1net
+    container_name: stack-jarvis1net
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    # Nadpisuje ścieżki z .env skopiowane z hosta: MSAL, microsoft_agent_settings.json, session, audyt
+    # MUSZĄ leżeć w wolumenie jarvis_data → /app/data, inaczej znikną po recreate kontenera.
+    environment:
+      AUDIT_LOG_PATH: /app/data/audit.jsonl
+      MICROSOFT_TOKEN_CACHE_PATH: /app/data/ms_graph_token_cache.json
+      SESSION_CONTEXT_PATH: /app/data/session_paths.json
+    restart: unless-stopped
+    volumes:
+      - jarvis_data:/app/data
+
+volumes:
+  jarvis_data:
