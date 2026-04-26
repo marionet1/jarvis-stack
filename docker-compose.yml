@@ -19,9 +19,24 @@ services:
       AUDIT_LOG_PATH: /app/data/audit.jsonl
       MICROSOFT_TOKEN_CACHE_PATH: /app/data/ms_graph_token_cache.json
       SESSION_CONTEXT_PATH: /app/data/session_paths.json
+      MCP_RAG_ROOT: /app/data/rag
+      RAG_BACKEND: ${RAG_BACKEND:-qdrant}
+      QDRANT_URL: ${QDRANT_URL:-http://qdrant:6333}
+      QDRANT_COLLECTION: ${QDRANT_COLLECTION:-jarvis1net_tool_docs}
+      RAG_GUIDANCE_AUTO: ${RAG_GUIDANCE_AUTO:-1}
     restart: unless-stopped
     volumes:
       - jarvis_data:/app/data
+    depends_on:
+      - qdrant
+
+  qdrant:
+    image: qdrant/qdrant:v1.10.1
+    container_name: stack-jarvis1net-qdrant
+    restart: unless-stopped
+    volumes:
+      - qdrant_data:/qdrant/storage
 
 volumes:
   jarvis_data:
+  qdrant_data:

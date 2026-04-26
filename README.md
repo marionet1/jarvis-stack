@@ -15,10 +15,11 @@ Related repositories:
 - The agent starts the MCP server as a stdio subprocess:
   `python /opt/mcp-jarvis1net/src/server.py`.
 - Optional Microsoft Graph integration is handled through MCP tools.
-- Docker deployment uses one image and one service:
+- Docker deployment uses one app container and one vector DB service:
   - Service: `jarvis1net`
   - Container: `stack-jarvis1net`
   - Image: `stack-jarvis1net`
+  - RAG service: `qdrant` (`stack-jarvis1net-qdrant`)
 
 ## Quick start (Docker, recommended)
 
@@ -37,12 +38,48 @@ Useful commands:
 docker compose ps
 docker compose logs -f
 docker compose restart jarvis1net
+docker compose restart qdrant
 docker compose down
 ```
 
 Notes:
 - Place `.env` in the repository root (next to `docker-compose.yml`).
 - Persistent data is stored in volume `jarvis_data` mounted to `/app/data`.
+- Vector index data is stored in `qdrant_data`.
+
+## RAG rollout (tools: Microsoft, filesystem, shell)
+
+The stack includes tool-guidance RAG in MCP (`rag_*` tools), backed by Qdrant.
+
+1. Set these values in root `.env`:
+
+```dotenv
+RAG_BACKEND=qdrant
+QDRANT_URL=http://qdrant:6333
+QDRANT_COLLECTION=jarvis1net_tool_docs
+OPENAI_API_KEY=...
+RAG_EMBED_MODEL=text-embedding-3-small
+RAG_GUIDANCE_AUTO=1
+```
+
+2. Start or rebuild services:
+
+```bash
+docker compose up -d --build
+```
+
+3. Ingest documentation:
+
+```bash
+cd mcp-jarvis1net
+python3 scripts/ingest_docs.py --source scripts/sources_microsoft.yaml --source scripts/sources_internal.yaml
+```
+
+4. Validate retrieval quality:
+
+```bash
+python3 tests/rag_eval/evaluate_rag.py
+```
 
 ## Local development (without Docker)
 
