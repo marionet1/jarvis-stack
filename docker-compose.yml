@@ -31,6 +31,9 @@ services:
     restart: unless-stopped
     volumes:
       - qdrant_data:/qdrant/storage
+    # Qdrant Web UI + REST API (only loopback — use SSH tunnel from your laptop if VPS is remote)
+    ports:
+      - "127.0.0.1:6333:6333"
 
 volumes:
   jarvis_data:
