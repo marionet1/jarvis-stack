@@ -12,7 +12,7 @@ Use `.env` only for secrets:
 - `RAG_EMBED_API_KEY` (optional, overrides `OPENROUTER_API_KEY` for embeddings)
 - `QDRANT_API_KEY` (optional, only if Qdrant auth is enabled)
 
-### Non-secret RAG settings (`mcp-jarvis1net/config/rag_config.json`)
+### Non-secret RAG settings (`mcp-jarvis1net/src/rag/rag_config.json`)
 
 Use this file for runtime behavior:
 
@@ -36,15 +36,15 @@ docker compose up -d --build
 Ingest baseline docs:
 
 ```bash
-docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/scripts/ingest_docs.py \
-  --source /opt/mcp-jarvis1net/scripts/sources_internal.yaml \
-  --source /opt/mcp-jarvis1net/scripts/sources_microsoft.yaml
+docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/src/rag/ingest_docs.py \
+  --source /opt/mcp-jarvis1net/src/rag/sources/internal.yaml \
+  --source /opt/mcp-jarvis1net/src/rag/sources/microsoft.yaml
 ```
 
 Run quality checks:
 
 ```bash
-docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/tests/rag_eval/evaluate_rag.py
+docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/src/rag/tests/evaluate_rag.py
 ```
 
 ## 3) Daily operations
@@ -54,9 +54,9 @@ docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/tests/rag_eval/eva
 If you changed source YAML files, re-run ingest:
 
 ```bash
-docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/scripts/ingest_docs.py \
-  --source /opt/mcp-jarvis1net/scripts/sources_internal.yaml \
-  --source /opt/mcp-jarvis1net/scripts/sources_microsoft.yaml
+docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/src/rag/ingest_docs.py \
+  --source /opt/mcp-jarvis1net/src/rag/sources/internal.yaml \
+  --source /opt/mcp-jarvis1net/src/rag/sources/microsoft.yaml
 ```
 
 ### Restart stack services
@@ -77,7 +77,7 @@ docker compose logs -f qdrant
 
 Edit:
 
-- `mcp-jarvis1net/config/rag_config.json`
+- `mcp-jarvis1net/src/rag/rag_config.json`
 
 Change:
 
@@ -87,18 +87,18 @@ Then rebuild/restart and reindex:
 
 ```bash
 docker compose up -d --build
-docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/scripts/ingest_docs.py \
-  --source /opt/mcp-jarvis1net/scripts/sources_internal.yaml \
-  --source /opt/mcp-jarvis1net/scripts/sources_microsoft.yaml
-docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/tests/rag_eval/evaluate_rag.py
+docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/src/rag/ingest_docs.py \
+  --source /opt/mcp-jarvis1net/src/rag/sources/internal.yaml \
+  --source /opt/mcp-jarvis1net/src/rag/sources/microsoft.yaml
+docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/src/rag/tests/evaluate_rag.py
 ```
 
 ## 5) Adding new documentation sources
 
 Add entries to:
 
-- `mcp-jarvis1net/scripts/sources_microsoft.yaml` (official docs)
-- `mcp-jarvis1net/scripts/sources_internal.yaml` (internal runbooks)
+- `mcp-jarvis1net/src/rag/sources/microsoft.yaml` (official docs)
+- `mcp-jarvis1net/src/rag/sources/internal.yaml` (internal runbooks)
 
 Each entry should include at least:
 
@@ -134,7 +134,7 @@ docker compose down
 
 ```bash
 docker compose up -d
-docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/tests/rag_eval/evaluate_rag.py
+docker compose exec -T jarvis1net python3 /opt/mcp-jarvis1net/src/rag/tests/evaluate_rag.py
 ```
 
 ## 7) Troubleshooting quick list

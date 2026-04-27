@@ -66,7 +66,7 @@ QDRANT_API_KEY=
 
 2. Configure non-secret RAG settings in:
 
-`mcp-jarvis1net/config/rag_config.json`
+`mcp-jarvis1net/src/rag/rag_config.json`
 
 3. Start or rebuild services:
 
@@ -78,13 +78,13 @@ docker compose up -d --build
 
 ```bash
 cd mcp-jarvis1net
-python3 scripts/ingest_docs.py --source scripts/sources_microsoft.yaml --source scripts/sources_internal.yaml
+python3 src/rag/ingest_docs.py --source src/rag/sources/microsoft.yaml --source src/rag/sources/internal.yaml
 ```
 
 5. Validate retrieval quality:
 
 ```bash
-python3 tests/rag_eval/evaluate_rag.py
+python3 src/rag/tests/evaluate_rag.py
 ```
 
 ## Local development (without Docker)
@@ -109,11 +109,34 @@ cp .env.example .env
 python3 src/main.py
 ```
 
-3. In agent `.env`, configure stdio MCP command:
+3. In `agent-jarvis1net/config/runtime_config.json`, configure stdio MCP command:
+
+```json
+{
+  "mcp_stdio_command": "python3",
+  "mcp_stdio_args": ["/absolute/path/to/mcp-jarvis1net/src/server.py"]
+}
+```
+
+## Telegram bot onboarding
+
+1. Create bot in [@BotFather](https://t.me/BotFather) with `/newbot`.
+2. Put token into root `.env`:
 
 ```dotenv
-MCP_STDIO_COMMAND=python3
-MCP_STDIO_ARGS=["/absolute/path/to/mcp-jarvis1net/src/server.py"]
+TELEGRAM_BOT_TOKEN=...
+```
+
+3. Send one message to the bot and read your chat ID:
+   - `https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/getUpdates`
+   - Use `message.chat.id`.
+4. Put allowed IDs into:
+   - `agent-jarvis1net/config/telegram_config.json`
+
+```json
+{
+  "allowed_chat_ids": ["123456789"]
+}
 ```
 
 ## Repository layout
@@ -127,7 +150,7 @@ MCP_STDIO_ARGS=["/absolute/path/to/mcp-jarvis1net/src/server.py"]
 ## Security
 
 - Never commit `.env`, private keys, or credentials.
-- Set `TELEGRAM_ALLOWED_CHAT_IDS` for production deployments.
+- Set `agent-jarvis1net/config/telegram_config.json` (`allowed_chat_ids`) for production deployments.
 
 ## License
 
