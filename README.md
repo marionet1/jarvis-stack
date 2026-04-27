@@ -53,6 +53,7 @@ The stack includes tool-guidance RAG in MCP (`rag_*` tools), backed by Qdrant.
 
 Detailed operator guide:
 - `docs/RAG_OPERATIONS_GUIDE.md`
+- `docs/TOOL_INTEGRATION_PLAYBOOK.md` (standard wdrazania nowych tooli i utrzymania porzadku)
 
 1. Set these values in root `.env`:
 
